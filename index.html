@@ -1,214 +1,217 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
-</head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1">&lt;title&gt;Azure Client Secret Expiration Automation&lt;/title&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-family: Arial, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>background: #f4f7fb;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>color: #1a1a1a;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>header {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>background: #0A4CFF;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>position: sticky;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>z-index: 1000;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>nav a {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin: 0 15px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>text-decoration: none;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-size: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>section {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>max-width: 900px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin: auto;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 40px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>h2 {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>color: #0A4CFF;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.card {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 25px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>box-shadow: 0px 3px 10px rgba(0,0,0,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin-bottom: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>code {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>background: #eee;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 6px 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>white-space: pre-wrap;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin-top: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-size: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>footer {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>background: #0A4CFF;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin-top: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>html {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>scroll-behavior: smooth;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Azure Client Secret Expiration Automation&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#overview"&gt;Overview&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#how"&gt;How It Works&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#steps"&gt;Steps&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#scripts"&gt;Scripts&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#contact"&gt;Contact&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
-<p class="p1">&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;section id="overview"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Overview&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Azure App Registration client secrets expire every 1–24 months. When secrets expire:&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Applications fail authentication&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Critical services go down&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Admins scramble to rotate secrets&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;This website gives you a simple and reliable way to AUTOMATE client secret renewal using Azure Automation + Managed Identity + Microsoft Graph API.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;section id="how"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;How It Works&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;The automation flow works like this:&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Azure Automation runbook runs daily&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Runbook uses a Managed Identity with Graph API permissions&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;It scans all App Registrations for secrets expiring in the next X days&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;If expiration is near → it auto-renews the secret&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Sends notifications through email/Teams&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/ul&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;pre&gt;&lt;code&gt;</p>
-<p class="p1">[Automation Account MI] ---reads---&gt; [App Registrations]</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>\</p>
-<p class="p1"><span class="Apple-converted-space">                                 </span>---&gt; renews secrets</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>\</p>
-<p class="p1"><span class="Apple-converted-space">                                   </span>---&gt; sends email alert</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/code&gt;&lt;/pre&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;section id="steps"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Step-by-Step Guide&lt;/h2&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;1. Create Azure Automation Account&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Create a PowerShell 7.2 automation account with a System-Assigned Managed Identity.&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;2. Assign Managed Identity Permissions&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Assign these Microsoft Graph API App roles:&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Application.ReadWrite.All&lt;/strong&gt;&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Directory.Read.All&lt;/strong&gt;&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/ul&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;3. List Expiring Secrets&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Runbook calls Graph API to fetch all App credential expirations.&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;4. Auto-Renew Secrets&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;If a secret is expiring in next X days, script creates a new one.&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;5. Send Alerts&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Email/SMS/Teams notification using Logic App or SendGrid.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;section id="scripts"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Scripts&lt;/h2&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;PowerShell Runbook – Detect Expiring Secrets&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;code&gt;</p>
-<p class="p1">$today = Get-Date</p>
-<p class="p1">$threshold = $today.AddDays(30)</p>
-<p class="p2"><br></p>
-<p class="p1">$appRegs = Invoke-MgGraphRequest -Method GET -Uri "https://graph.microsoft.com/v1.0/applications?$select=id,displayName,passwordCredentials"</p>
-<p class="p2"><br></p>
-<p class="p1">foreach ($app in $appRegs.value) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>foreach ($cred in $app.passwordCredentials) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if ([datetime]$cred.endDateTime -lt $threshold) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>Write-Output "Expiring: $($app.displayName) - $($cred.endDateTime)"</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1">}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/code&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;PowerShell Runbook – Auto Renew Secret&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;code&gt;</p>
-<p class="p1">$newSecret = @{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>passwordCredential = @{</p>
-<p class="p1"><span class="Apple-converted-space">        </span>displayName = "AutoRenewed"</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">Invoke-MgGraphRequest `</p>
-<p class="p1"><span class="Apple-converted-space">    </span>-Method POST `</p>
-<p class="p1"><span class="Apple-converted-space">    </span>-Uri "https://graph.microsoft.com/v1.0/applications/$($app.id)/addPassword" `</p>
-<p class="p1"><span class="Apple-converted-space">    </span>-Body ($newSecret | ConvertTo-Json)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/code&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Kusto Query – Secret Monitoring&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;code&gt;</p>
-<p class="p1">AppServiceAuthenticationAudit</p>
-<p class="p1">| where SecretExpiryDate &amp;lt; now() + 30d</p>
-<p class="p1">| project AppName, SecretExpiryDate</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/code&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;section id="contact"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Contact&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;For feedback or contributions, reach out:&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; admin@example.com&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;footer&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>© 2025 Azure Automation — Client Secret Management</p>
-<p class="p1">&lt;/footer&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
-</body>
-</html>
+AzureOpsAuto
+Overview How It Works Step-by-Step Get Scripts
+
+Overview How It Works Step-by-Step Get Scripts
+
+
+Updated for Graph API
+Never Let a Secret  Expire Again
+Automate client secret monitoring with Azure Automation. Receive email alerts 60, 30, and 7 days before expiration to prevent production outages.
+Start Setup Get Scripts
+Proactive Monitoring Strategy
+
+The Problem
+App Registration secrets have a hard expiry. When they die, your app dies. Manual calendar reminders are fragile and easily missed by human operators.
+
+The Cadence
+We implement a rigid notification schedule. You will receive alerts exactly 60 days (planning), 30 days (warning), and 7 days (critical) before expiration.
+
+The Delivery
+Alerts are delivered via HTML email to your team's mailbox or ticketing system. The email identifies the specific app, App ID, and exact expiry date.
+Architecture
+Automation Flow
+
+
+Daily Trigger
+Azure Automation Schedule
+The runbook executes once every 24 hours to scan the tenant.
+
+Secret Inspection
+Managed Identity + Graph API
+Script authenticates and pulls expiry dates for all apps using Application.Read.All.
+
+Mailbox Alert
+Send-MgUserMail
+If 60/30/7 days remain, an email is sent FROM your automation mailbox TO your operations team.
+Secure by Design
+This solution uses Managed Identities, meaning:
+	•	No hardcoded client secrets in scripts
+	•	No username/password storage
+	•	Granular Graph API permissions
+Detailed Setup Guide
+1
+Create Automation Account
+1. Go to Azure Portal → Search "Automation Accounts" → Create. 2. Select your Subscription and Resource Group. 3. Critical: Under the "Identity" tab (or Advanced), ensure System assigned managed identity is checked/enabled. This identity will be used to run the scripts.
+2
+Import PowerShell Modules
+The script relies on the Microsoft Graph SDK. You must import these modules into your Automation Account from the Gallery:
+Go to your Automation Account → Shared Resources → Modules → Add a module → Browse Gallery.
+	•	Microsoft.Graph.Authentication (Login)
+	•	Microsoft.Graph.Applications (Read Apps)
+	•	Microsoft.Graph.Users.Actions (Send Email)
+Note: Ensure you select Runtime version 5.1 (or 7.2). Both are supported by these modules.
+3
+Assign Graph API Permissions
+The Managed Identity needs permission to read application secrets and send emails. This cannot be done in the portal UI; you must run this script locally once by an admin.
+Tip: You need the Object ID of the Automation Account's Managed Identity (found in the Identity blade).
+SetupScript.ps1 - Run locally
+# RUN THIS LOCALLY (One-time setup)
+# This script grants the Managed Identity permission to:
+# 1. Read all App Registrations (Application.Read.All)
+# 2. Send emails as ANY user (Mail.Send) - Use with caution!
+
+$TenantId = "your-tenant-id"
+# Get this Object ID from the Automation Account -> Identity blade
+$ManagedIdentityObjectId = "paste-object-id-of-managed-identity-here"
+
+Connect-MgGraph -TenantId $TenantId -Scopes "AppRoleAssignment.ReadWrite.All", "Application.Read.All"
+
+$GraphAppId = "00000003-0000-0000-c000-000000000000" # Microsoft Graph Service Principal
+
+# 1. Grant Application.Read.All
+$AppReadRole = Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $GraphAppId | 
+               Where-Object {$_.Value -eq "Application.Read.All"} 
+
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ManagedIdentityObjectId -PrincipalId $ManagedIdentityObjectId -ResourceId $GraphAppId -AppRoleId $AppReadRole.Id
+
+# 2. Grant Mail.Send
+# This allows the automation account to send mail via Send-MgUserMail
+$MailSendRole = Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $GraphAppId | 
+                Where-Object {$_.Value -eq "Mail.Send"}
+
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ManagedIdentityObjectId -PrincipalId $ManagedIdentityObjectId -ResourceId $GraphAppId -AppRoleId $MailSendRole.Id
+
+Write-Host "Permissions assigned successfully."
+4
+Create & Configure Runbook
+1. Create a new PowerShell Runbook named Monitor-AppSecrets. 2. Paste the script from the "Scripts" section below. 3. Update Variables: Look for $SenderMailbox in the script.
+Sender Mailbox Requirement:
+The $SenderMailbox variable must be a valid User Mailbox or Shared Mailbox in your tenant. The Mail.Send permission allows the Managed Identity to impersonate this user to send the alert.
+5
+Schedule the Runbook
+To ensure the 60, 30, and 7-day triggers fire on the correct day, the script must run daily.
+	•	In the Runbook, click Schedules → Add a schedule.
+	•	Create a new schedule: "Daily-6AM".
+	•	Recurrence: Daily.
+	•	Link it to your runbook.
+Production Script
+Copy, paste, and configure variables.
+
+Note: Update $SenderMailbox and $RecipientEmail at the top of the script before publishing.
+Runbook: Monitor-AppSecrets.ps1
+# PowerShell Runbook: Check-AppRegistrationSecrets
+# Required Modules: 
+#   - Microsoft.Graph.Authentication
+#   - Microsoft.Graph.Applications
+#   - Microsoft.Graph.Users.Actions (Required for Send-MgUserMail)
+
+param(
+    # IMPORTANT: The Managed Identity must have 'Mail.Send' permission
+    # and this mailbox must exist in your tenant.
+    [string]$SenderMailbox = "automation-alerts@contoso.com",
+    
+    # Who receives the alerts?
+    [string]$RecipientEmail = "admin-team@contoso.com"
+)
+
+$ErrorActionPreference = "Stop"
+
+try {
+    # 1. Connect to Graph using Managed Identity
+    Write-Output "Connecting to Microsoft Graph..."
+    Connect-MgGraph -Identity
+    
+    # 2. Get all applications with secrets
+    # We fetch all apps to ensure we don't miss any.
+    $apps = Get-MgApplication -All -Property DisplayName, AppId, PasswordCredentials
+
+    $alertItems = @()
+
+    foreach ($app in $apps) {
+        foreach ($secret in $app.PasswordCredentials) {
+            $expiryDate = $secret.EndDateTime
+            
+            # Check if secret has an expiry date
+            if ($null -ne $expiryDate) {
+                $daysLeft = ($expiryDate - (Get-Date)).Days
+
+                # 3. Check for specific notification windows: 60, 30, or 7 days
+                if ($daysLeft -eq 60 -or $daysLeft -eq 30 -or $daysLeft -eq 7) {
+                    
+                    $priority = "Warning"
+                    if ($daysLeft -le 7) { $priority = "URGENT" }
+                    
+                    $alertItems += [PSCustomObject]@{
+                        AppName = $app.DisplayName
+                        AppId = $app.AppId
+                        DaysLeft = $daysLeft
+                        Priority = $priority
+                        ExpiresOn = $expiryDate.ToString("yyyy-MM-dd")
+                    }
+                    
+                    Write-Output "DETECTED: $($app.DisplayName) expires in $daysLeft days."
+                }
+            }
+        }
+    }
+
+    # 4. Send Email if expiring secrets found
+    if ($alertItems.Count -gt 0) {
+        Write-Output "Sending alert email to $RecipientEmail..."
+        
+        # Build HTML Table
+        $tableRows = ""
+        foreach ($item in $alertItems) {
+            # Highlight urgent items in red
+            $color = if ($item.DaysLeft -le 7) { "#ffebee" } else { "#ffffff" }
+            $tableRows += "<tr style='background-color:$color'><td>$($item.AppName)</td><td>$($item.AppId)</td><td><strong>$($item.DaysLeft)</strong></td><td>$($item.ExpiresOn)</td></tr>"
+        }
+
+        $htmlBody = @"
+        <div style="font-family: Segoe UI, sans-serif;">
+            <h3 style="color:#0078D4">Azure App Secret Expiry Alert</h3>
+            <p>The following application secrets are approaching expiration:</p>
+            <table border='1' cellpadding='10' style='border-collapse:collapse; border:1px solid #ddd; width:100%;'>
+                <tr style='background-color:#f8f9fa; text-align:left;'><th>App Name</th><th>App ID</th><th>Days Left</th><th>Expiry Date</th></tr>
+                $tableRows
+            </table>
+            <br/>
+            <p><strong>Action Required:</strong> Please rotate these secrets immediately to prevent production outages.</p>
+            <p style="color:#666; font-size:12px;">Generated by Azure Automation | 60-30-7 Day Monitor</p>
+        </div>
+"@
+
+        $params = @{
+            Message = @{
+                Subject = "[ACTION REQUIRED] Azure Secrets Expiring ($($alertItems.Count) Apps)"
+                Body = @{
+                    ContentType = "HTML"
+                    Content = $htmlBody
+                }
+                ToRecipients = @(
+                    @{ EmailAddress = @{ Address = $RecipientEmail } }
+                )
+            }
+            SaveToSentItems = $false
+        }
+
+        # Send using the Sender Mailbox
+        # The Managed Identity acts on behalf of this mailbox.
+        Send-MgUserMail -UserId $SenderMailbox -BodyParameter $params
+        
+        Write-Output "Email sent successfully."
+    } else {
+        Write-Output "No secrets found expiring specifically at 60, 30, or 7 days today."
+    }
+
+} catch {
+    Write-Error "An error occurred: $_"
+}
+AzureOpsAuto
+Simplifying Azure governance one script at a time.
+Docs
+	•	Graph API: Send Mail
+	•	Azure Automation Overview
+Support
+support@example.com
+© AzureOpsAuto. Not affiliated with Microsoft.
