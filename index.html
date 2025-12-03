@@ -191,7 +191,7 @@
   <nav class="nav-links">
     <a href="#overview">Overview & Logic</a>
     <a href="#step1">1. Automation Account</a>
-    <a href="#step2">2. Import Modules</a>
+    <a href="#step2">2. Runtime Environment</a>
     <a href="#step3">3. Graph Permissions</a>
     <a href="#step4">4. Mailbox Configuration</a>
     <a href="#step5">5. Runbook Script</a>
@@ -247,49 +247,54 @@
         <li>Navigate to <strong>Azure Portal > Automation Accounts > Create</strong>.</li>
         <li><strong>Resource Group:</strong> Select your Management/Identity RG.</li>
         <li><strong>Managed Identity:</strong> Ensure "System Assigned" is checked. This is critical for authentication without storing credentials.</li>
-        <li><strong>Network Access:</strong> Public access (unless you require Hybrid Workers).</li>
       </ul>
     </div>
   </section>
 
   <section id="step2">
-    <h2>2. Import Modules (Critical)</h2>
-    <p>Azure Automation does not include the Microsoft Graph SDK by default. The script will fail if these modules are not imported.</p>
+    <h2>2. Configure Runtime Environment</h2>
+    <p>We use the <strong>Runtime Experience</strong> feature to create a modern PowerShell 7.2 environment containing the Microsoft Graph SDK modules.</p>
+    
+    <div class="info-box">
+      <strong>Why this matters:</strong> PowerShell 5.1 is legacy. Graph SDK modules work best in 7.2+. We create a dedicated environment to manage these dependencies.
+    </div>
+
     <div class="step-details">
+      <h3>2.1 Create the Environment</h3>
       <ul>
-        <li>Go to your Automation Account blade > <strong>Modules</strong>.</li>
-        <li>Click <strong>Add a module</strong> > <strong>Browse Gallery</strong>.</li>
-        <li>Search for and import the following modules (Runtime: PowerShell 7.2):
-          <ol>
-            <li><code style="color:var(--accent)">Microsoft.Graph.Authentication</code></li>
-            <li><code style="color:var(--accent)">Microsoft.Graph.Applications</code></li>
-            <li><code style="color:var(--accent)">Microsoft.Graph.Users.Actions</code> (Required for sending mail)</li>
-          </ol>
-        </li>
+        <li>In your Automation Account, look at the left menu under <strong>Process Automation</strong>.</li>
+        <li>Click <strong>Runtime Environments</strong> (Preview/GA).</li>
+        <li>Click <strong>Create</strong>.</li>
+        <li><strong>Name:</strong> <code>PS7-Graph-Env</code></li>
+        <li><strong>Language:</strong> PowerShell</li>
+        <li><strong>Runtime Version:</strong> 7.2</li>
       </ul>
+
+      <h3>2.2 Add Packages</h3>
+      <p>In the same "Create" wizard, go to the <strong>Packages</strong> tab. Click "Add from Gallery" and add these three specific modules:</p>
+      <ul>
+        <li><code style="color:var(--accent)">Microsoft.Graph.Authentication</code></li>
+        <li><code style="color:var(--accent)">Microsoft.Graph.Applications</code></li>
+        <li><code style="color:var(--accent)">Microsoft.Graph.Users.Actions</code> (Required for sending mail)</li>
+      </ul>
+      <p>Click <strong>Create</strong> and wait for the status to change from "Creating" to "Succeeded".</p>
     </div>
   </section>
 
   <section id="step3">
     <h2>3. Assign Graph Permissions</h2>
-    <p>The Managed Identity (MI) requires specific Graph API permissions to Read all apps and Send email. These are "Application Permissions" and must be assigned via PowerShell.</p>
-
-    <div class="info-box">
-      <strong>Permissions Explained:</strong><br>
-      • <code>Application.Read.All</code>: Allows the script to scan all App Registrations dates.<br>
-      • <code>Mail.Send</code>: Allows the MI to send email via Graph API as the Shared Mailbox.
-    </div>
+    <p>The Managed Identity (MI) requires specific Graph API permissions to Read all apps and Send email.</p>
     
     <div class="code-wrapper">
       <div class="code-header">
         <span>PowerShell (Run locally as Admin)</span>
         <button class="copy-btn" onclick="copyCode('code1')">Copy</button>
       </div>
-      <pre><code id="code1"><span class="cmt"># 1. Connect to Graph (Requires Global Admin or Privileged Role Admin)</span>
+      <pre><code id="code1"><span class="cmt"># 1. Connect to Graph (Requires Global Admin)</span>
 <span class="kwd">Connect-MgGraph</span> -Scopes "AppRoleAssignment.ReadWrite.All","Application.Read.All"
 
 <span class="cmt"># 2. Configuration</span>
-<span class="var">$IdentityName</span> = <span class="str">"aa-secret-monitor-prod"</span> <span class="cmt"># Name of your Automation Account</span>
+<span class="var">$IdentityName</span> = <span class="str">"aa-secret-monitor-prod"</span> <span class="cmt"># Automation Account Name</span>
 <span class="var">$MI</span> = <span class="kwd">Get-MgServicePrincipal</span> -Filter <span class="str">"displayName eq '$IdentityName'"</span>
 <span class="var">$GraphApp</span> = <span class="kwd">Get-MgServicePrincipal</span> -Filter <span class="str">"appId eq '00000003-0000-0000-c000-000000000000'"</span>
 
@@ -304,7 +309,7 @@
         -PrincipalId <span class="var">$MI</span>.Id `
         -ResourceId <span class="var">$GraphApp</span>.Id `
         -AppRoleId <span class="var">$RoleID</span>.Id
-    <span class="kwd">Write-Host</span> <span class="str">"assigned $RoleName"</span> -ForegroundColor Green
+    <span class="kwd">Write-Host</span> <span class="str">"Assigned $RoleName"</span> -ForegroundColor Green
 }</code></pre>
     </div>
   </section>
@@ -315,14 +320,14 @@
     <div class="step-details">
       <ul>
         <li><strong>Sender Address:</strong> Ensure you have a valid shared mailbox (e.g., <code>alerts@domain.com</code>).</li>
-        <li><strong>No "Send As" Delegation needed:</strong> Because we use the <code>Mail.Send</code> Application Permission, the Managed Identity can send mail as any user in the tenant. We restrict the "From" address in the script logic below.</li>
+        <li><strong>Permissions:</strong> The <code>Mail.Send</code> Application Permission assigned in Step 3 allows the Managed Identity to send as <em>any</em> user. We restrict the "From" address in the script logic below.</li>
       </ul>
     </div>
   </section>
 
   <section id="step5">
     <h2>5. The Runbook Script</h2>
-    <p>Create a new Runbook (PowerShell 7.2). This script aggregates all alerts into one summary email.</p>
+    <p>Create a new Runbook. <strong>Crucial:</strong> When creating the runbook, select the <code>PS7-Graph-Env</code> Runtime Environment you created in Step 2.</p>
     
     <div class="code-wrapper">
       <div class="code-header">
@@ -342,7 +347,7 @@
     <span class="var">$token</span> = <span class="kwd">Get-AzAccessToken</span> -ResourceUrl <span class="str">"https://graph.microsoft.com"</span>
     <span class="kwd">Connect-MgGraph</span> -AccessToken <span class="var">$token</span>.Token -ErrorAction Stop
 } <span class="kwd">catch</span> {
-    <span class="kwd">Write-Error</span> <span class="str">"Failed to authenticate Managed Identity. Check Module imports."</span>
+    <span class="kwd">Write-Error</span> <span class="str">"Failed to authenticate. Check Runtime Environment settings."</span>
     <span class="kwd">exit</span>
 }
 
@@ -419,7 +424,7 @@
             <li><strong>Recur every:</strong> 1 Day</li>
           </ul>
         </li>
-        <li>Go back to your <strong>Runbook</strong>, click <strong>Link to schedule</strong>, and select the schedule you just made.</li>
+        <li>Link this schedule to your Runbook.</li>
       </ul>
     </div>
   </section>
