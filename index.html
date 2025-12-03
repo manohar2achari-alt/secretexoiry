@@ -3,259 +3,376 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>App Registration Secret Alerts</title>
-
+<title>Azure App Registration Monitor | Setup Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
-    body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-        background: #fdfdfd;
-        color: #111;
-    }
+  :root {
+    --bg-body: #090a10;
+    --bg-nav: #11131f;
+    --bg-card: #161825;
+    --bg-code: #1e2030;
+    --accent: #7f5af0;
+    --accent-hover: #6842c9;
+    --text-main: #fffffe;
+    --text-muted: #94a1b2;
+    --border: #2cb67d;
+    --code-func: #ff8906; /* Orange */
+    --code-str: #2cb67d; /* Green */
+    --code-var: #f25f4c; /* Red */
+  }
 
-    /* Smooth fade animations */
-    .fade {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeIn 1s ease forwards;
-    }
+  /* RESET & BASE */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  a { color: var(--accent); text-decoration: none; transition: 0.2s; }
+  a:hover { color: var(--text-main); }
 
-    @keyframes fadeIn {
-        to { opacity: 1; transform: translateY(0); }
-    }
+  /* SIDEBAR */
+  aside {
+    width: 280px;
+    background: var(--bg-nav);
+    padding: 40px 25px;
+    position: fixed;
+    height: 100vh;
+    border-right: 1px solid #23263a;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .brand { font-weight: 800; font-size: 20px; color: #fff; margin-bottom: 40px; letter-spacing: -0.5px; }
+  .brand span { color: var(--accent); }
 
-    /* Hero section */
-    .hero {
-        padding: 120px 20px;
-        text-align: center;
-        background: linear-gradient(180deg, #fafafa, #ffffff);
-    }
-    .hero h1 {
-        font-size: 54px;
-        font-weight: 700;
-        margin-bottom: 20px;
-        letter-spacing: -1px;
-    }
-    .hero p {
-        font-size: 22px;
-        color: #555;
-        max-width: 700px;
-        margin: 0 auto;
-    }
+  .nav-links a {
+    display: block;
+    padding: 10px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    border-bottom: 1px solid #23263a;
+  }
+  .nav-links a:hover { color: #fff; padding-left: 5px; }
 
-    /* Sections */
-    h2 {
-        font-size: 38px;
-        text-align: center;
-        margin-top: 80px;
-        margin-bottom: 20px;
-        color: #111;
-    }
+  /* MAIN CONTENT */
+  main {
+    margin-left: 280px;
+    padding: 60px 80px;
+    max-width: 1000px;
+    width: 100%;
+  }
 
-    /* Card styling */
-    .card {
-        max-width: 950px;
-        margin: 25px auto;
-        padding: 40px;
-        border-radius: 28px;
-        background: white;
-        box-shadow: 0 12px 35px rgba(0,0,0,0.08);
-    }
+  h1 { font-size: 42px; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; }
+  h2 { font-size: 28px; margin-top: 60px; margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
+  h3 { font-size: 18px; color: var(--text-muted); margin-top: 30px; }
+  p { color: var(--text-muted); font-size: 16px; margin-bottom: 20px; }
 
-    .step-title {
-        font-size: 26px;
-        font-weight: 600;
-        margin-bottom: 12px;
-    }
+  /* FEATURES GRID */
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 40px 0; }
+  .feature-card { background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid #23263a; }
+  .feature-card strong { display: block; color: #fff; margin-bottom: 5px; font-size: 18px; }
 
-    .step-text {
-        font-size: 18px;
-        color: #444;
-        line-height: 1.6;
-    }
+  /* ARCHITECTURE DIAGRAM (CSS ONLY) */
+  .diagram-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-card);
+    padding: 40px;
+    border-radius: 16px;
+    margin: 40px 0;
+    overflow-x: auto;
+  }
+  .node {
+    background: #23263a;
+    border: 1px solid var(--accent);
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  .arrow { font-size: 20px; color: var(--text-muted); margin: 0 15px; }
 
-    /* Screenshot placeholder */
-    .shot {
-        width: 100%;
-        height: 260px;
-        background: #ececec;
-        border-radius: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #888;
-        font-size: 18px;
-        margin-top: 20px;
-        font-style: italic;
-    }
+  /* CODE BLOCKS */
+  .code-wrapper {
+    background: var(--bg-code);
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 1px solid #333;
+    overflow: hidden;
+  }
+  .code-header {
+    background: #161825;
+    padding: 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .copy-btn {
+    background: transparent;
+    border: 1px solid #444;
+    color: #fff;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    transition: 0.2s;
+  }
+  .copy-btn:hover { background: var(--accent); border-color: var(--accent); }
+  
+  pre { margin: 0; padding: 20px; overflow-x: auto; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #e5e5e5; }
+  
+  /* Syntax Highlight Mockup classes */
+  .kwd { color: #ff8906; font-weight: bold; } /* Keyword */
+  .str { color: #2cb67d; } /* String */
+  .var { color: #f25f4c; } /* Variable */
+  .cmt { color: #6d758d; font-style: italic; } /* Comment */
 
-    /* Code */
-    pre {
-        background: #f5f5f7;
-        padding: 22px;
-        border-radius: 16px;
-        overflow-x: auto;
-        font-size: 15px;
-        line-height: 1.5;
-        margin-top: 20px;
-    }
+  /* ALERTS */
+  .alert {
+    background: rgba(127, 90, 240, 0.1);
+    border-left: 4px solid var(--accent);
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    color: #d1d5db;
+    font-size: 15px;
+  }
 
-    footer {
-        text-align: center;
-        padding: 40px;
-        color: #777;
-        margin-top: 80px;
-        font-size: 14px;
-    }
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    body { flex-direction: column; }
+    aside { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #333; padding: 20px; }
+    main { margin-left: 0; padding: 40px 20px; }
+    .features { grid-template-columns: 1fr; }
+    .diagram-container { flex-direction: column; gap: 20px; }
+    .arrow { transform: rotate(90deg); margin: 10px 0; }
+  }
 </style>
 </head>
-
 <body>
 
-<!-- HERO -->
-<section class="hero fade">
-    <h1>App Registration Secret Alerts</h1>
-    <p>A clean, reliable Azure Automation runbook that sends early email alerts (60, 30, 7 days before expiry) for all App Registration secrets in your tenant.</p>
-</section>
+<aside>
+  <div class="brand">Azure<span>Ops</span> Docs</div>
+  <nav class="nav-links">
+    <a href="#overview">Overview</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#prereqs">Prerequisites</a>
+    <a href="#step1">1. Automation Account</a>
+    <a href="#step2">2. Graph Permissions</a>
+    <a href="#step3">3. Mailbox Access</a>
+    <a href="#step4">4. Runbook Script</a>
+    <a href="#step5">5. Scheduling</a>
+  </nav>
+</aside>
 
-<!-- SETUP -->
-<h2 class="fade">Step-by-Step Setup Guide</h2>
-
-<!-- STEP 1 -->
-<div class="card fade">
-    <div class="step-title">1. Create an Azure Automation Account</div>
-    <div class="step-text">
-        • Navigate to Azure Portal → Automation Accounts → Create<br>
-        • Enable System Assigned Managed Identity<br>
-        • Use the same region as your apps for faster Graph access
+<main>
+  
+  <section id="overview">
+    <h1>App Registration Secret Monitor</h1>
+    <p>A "set and forget" solution to prevent production outages caused by expired Service Principal secrets. This tool runs daily in Azure Automation, scanning for credentials expiring within 60, 30, and 7 days.</p>
+    
+    <div class="features">
+      <div class="feature-card">
+        <strong>⚡ Serverless</strong>
+        Runs on Azure Automation (PowerShell 7.2) with no VMs to manage.
+      </div>
+      <div class="feature-card">
+        <strong>🔒 Secure by Design</strong>
+        Uses Managed Identity. No client secrets stored in code.
+      </div>
+      <div class="feature-card">
+        <strong>📧 Consolidated Alerts</strong>
+        Sends a single summary HTML email table, not one email per app.
+      </div>
+      <div class="feature-card">
+        <strong>🛠 No Premium Licenses</strong>
+        Works with standard Entra ID (Free) and basic Automation limits.
+      </div>
     </div>
+  </section>
 
-    <div class="shot">Screenshot Placeholder (Automation Account)</div>
-</div>
-
-<!-- STEP 2 -->
-<div class="card fade">
-    <div class="step-title">2. Locate the Managed Identity Service Principal</div>
-    <div class="step-text">
-        Every Automation Account creates a Managed Identity. We must assign Graph <strong>application</strong> permissions to this identity (not delegated permissions).<br><br>
-
-        First, sign in with a privileged account:
+  <section id="architecture">
+    <h2>Architecture</h2>
+    <div class="diagram-container">
+      <div class="node">Azure Runbook<br><span style="font-size:11px; color:#aaa;">(PowerShell Script)</span></div>
+      <div class="arrow">→</div>
+      <div class="node">Managed Identity<br><span style="font-size:11px; color:#aaa;">(System Assigned)</span></div>
+      <div class="arrow">→</div>
+      <div class="node">Microsoft Graph<br><span style="font-size:11px; color:#aaa;">(Read Apps)</span></div>
+      <div class="arrow">→</div>
+      <div class="node">Exchange Online<br><span style="font-size:11px; color:#aaa;">(Send Mail)</span></div>
     </div>
+  </section>
 
-<pre>
-Install-Module Microsoft.Graph -Scope CurrentUser -Force
-Connect-MgGraph -Scopes "Application.ReadWrite.All","AppRoleAssignment.ReadWrite.All"
-
-$mi = Get-MgServicePrincipal -Filter "displayName eq 'YOUR-AUTOMATION-ACCOUNT-NAME'"
-$mi
-</pre>
-
-    <div class="shot">Screenshot Placeholder (Managed Identity SP)</div>
-</div>
-
-<!-- STEP 3 -->
-<div class="card fade">
-    <div class="step-title">3. Assign Microsoft Graph App Permissions (AppRole Assignments)</div>
-    <div class="step-text">
-        Managed Identity needs:<br>
-        • Application.Read.All<br>
-        • Directory.Read.All<br>
-        • Mail.Send (App-only)<br><br>
-
-        These must be assigned via Graph (not the portal).
+  <section id="prereqs">
+    <h2>Prerequisites</h2>
+    <div class="alert">
+      <strong>Role Required:</strong> You need <code>Global Administrator</code> or <code>Privileged Role Administrator</code> to assign Graph permissions to a Managed Identity.
     </div>
+  </section>
 
-<pre>
-$graph = Get-MgServicePrincipal -Filter "displayName eq 'Microsoft Graph'"
+  <section id="step1">
+    <h2>1. Create Automation Account</h2>
+    <p>Create a new Azure Automation resource. Ensure <strong>System Assigned Managed Identity</strong> is enabled during creation.</p>
+    <p>Once created, go to <strong>Identity</strong> in the left blade and copy the <code>Object (principal) ID</code>.</p>
+  </section>
 
-# Mail.Send (Application permission)
-$mailSend = $graph.AppRoles | 
-    Where-Object { $_.Value -eq "Mail.Send" -and $_.AllowedMemberTypes -contains "Application" }
+  <section id="step2">
+    <h2>2. Assign Graph Permissions</h2>
+    <p>The Managed Identity needs permission to read all applications and send emails. These permissions cannot be added via the Azure Portal GUI; they must be added via PowerShell.</p>
+    
+    <div class="code-wrapper">
+      <div class="code-header">
+        <span>PowerShell (Local Machine)</span>
+        <button class="copy-btn" onclick="copyCode('code1')">Copy</button>
+      </div>
+      <pre><code id="code1"><span class="cmt"># 1. Connect as an Admin</span>
+<span class="kwd">Connect-MgGraph</span> -Scopes "AppRoleAssignment.ReadWrite.All","Application.Read.All"
 
-# Assign permission
-New-MgServicePrincipalAppRoleAssignedTo `
- -ServicePrincipalId $mi.Id `
- -PrincipalId $mi.Id `
- -ResourceId $graph.Id `
- -AppRoleId $mailSend.Id
-</pre>
+<span class="cmt"># 2. Define Variables</span>
+<span class="var">$ManagedIdentityName</span> = <span class="str">"aa-secret-monitor-prod"</span> <span class="cmt"># Your Automation Account Name</span>
+<span class="var">$MI</span> = <span class="kwd">Get-MgServicePrincipal</span> -Filter <span class="str">"displayName eq '$ManagedIdentityName'"</span>
+<span class="var">$GraphApp</span> = <span class="kwd">Get-MgServicePrincipal</span> -Filter <span class="str">"appId eq '00000003-0000-0000-c000-000000000000'"</span>
 
-    <div class="shot">Screenshot Placeholder (Graph Permission Assignment)</div>
-</div>
+<span class="cmt"># 3. Define Permissions Needed</span>
+<span class="var">$Perms</span> = @(<span class="str">"Application.Read.All"</span>, <span class="str">"Mail.Send"</span>)
 
-<!-- STEP 4 -->
-<div class="card fade">
-    <div class="step-title">4. Sending Email Using Managed Identity (Shared Mailbox)</div>
-    <div class="step-text">
-        Your Managed Identity will send email <strong>as your shared mailbox</strong> using <code>Send-MgUserMail</code>.<br><br>
-        In the shared mailbox, assign:<br>
-        • “Send As” → to the Managed Identity’s service principal<br><br>
-        Example:
+<span class="cmt"># 4. Loop and Assign</span>
+<span class="kwd">foreach</span> (<span class="var">$Perm</span> <span class="kwd">in</span> <span class="var">$Perms</span>) {
+    <span class="var">$Role</span> = <span class="var">$GraphApp</span>.AppRoles | <span class="kwd">Where-Object</span> {$_.Value -eq <span class="var">$Perm</span>}
+    <span class="kwd">New-MgServicePrincipalAppRoleAssignedTo</span> `
+        -ServicePrincipalId <span class="var">$MI</span>.Id `
+        -PrincipalId <span class="var">$MI</span>.Id `
+        -ResourceId <span class="var">$GraphApp</span>.Id `
+        -AppRoleId <span class="var">$Role</span>.Id
+    <span class="kwd">Write-Host</span> <span class="str">"Assigned $Perm"</span> -ForegroundColor Green
+}</code></pre>
     </div>
+  </section>
 
-<pre>
-Send-MgUserMail -UserId "alerts-mailbox@domain.com" -Body @{
-  ContentType = "HTML"
-  Content = "Secret expiring soon..."
-} -Subject "App Secret Expiry Notice" `
- -ToRecipients @(@{EmailAddress = @{Address="iam-team@domain.com"}})
-</pre>
-
-    <div class="shot">Screenshot Placeholder (Shared Mailbox Permissions)</div>
-</div>
-
-<!-- STEP 5 -->
-<div class="card fade">
-    <div class="step-title">5. The Final Runbook Script</div>
-    <div class="step-text">
-        This runbook checks all App Registration secrets, finds ones expiring in 60, 30, or 7 days, and emails your IAM DL.
+  <section id="step3">
+    <h2>3. Configure Shared Mailbox</h2>
+    <p>For the automation to send emails "from" a specific address, the Managed Identity must be granted <strong>Send As</strong> permissions on that mailbox.</p>
+    <div class="alert">
+      You can do this via the Microsoft 365 Admin Center (Exchange > Mailbox > Delegation) or via Exchange Online PowerShell.
     </div>
+  </section>
 
-<pre>
-Connect-AzAccount -Identity
-Connect-MgGraph -Identity
+  <section id="step4">
+    <h2>4. The Runbook Script</h2>
+    <p>Create a new Runbook (PowerShell 7.2). Paste the script below. This improved version aggregates all expiring apps into a single HTML table.</p>
+    
+    <div class="code-wrapper">
+      <div class="code-header">
+        <span>Runbook Source Code</span>
+        <button class="copy-btn" onclick="copyCode('code2')">Copy</button>
+      </div>
+      <pre><code id="code2"><span class="cmt"># --- CONFIGURATION ---</span>
+<span class="var">$NotifyDays</span> = @(60, 30, 7)
+<span class="var">$SenderEmail</span> = <span class="str">"alerts@yourdomain.com"</span>
+<span class="var">$RecipientEmail</span> = <span class="str">"iam-team@yourdomain.com"</span>
 
-$notifyDays = @(60, 30, 7)
-$today = Get-Date
+<span class="cmt"># --- AUTHENTICATION ---</span>
+<span class="kwd">Connect-AzAccount</span> -Identity
+<span class="var">$token</span> = <span class="kwd">Get-AzAccessToken</span> -ResourceUrl <span class="str">"https://graph.microsoft.com"</span>
+<span class="kwd">Connect-MgGraph</span> -AccessToken <span class="var">$token</span>.Token
 
-$apps = Get-MgApplication -All
+<span class="var">$ExpiringApps</span> = @()
+<span class="var">$Today</span> = <span class="kwd">Get-Date</span>
+<span class="var">$Apps</span> = <span class="kwd">Get-MgApplication</span> -All -Property DisplayName, AppId, PasswordCredentials
 
-foreach ($app in $apps) {
-    foreach ($cred in $app.PasswordCredentials) {
+<span class="cmt"># --- LOGIC ---</span>
+<span class="kwd">foreach</span> (<span class="var">$App</span> <span class="kwd">in</span> <span class="var">$Apps</span>) {
+    <span class="kwd">foreach</span> (<span class="var">$Cred</span> <span class="kwd">in</span> <span class="var">$App</span>.PasswordCredentials) {
+        <span class="var">$Expiry</span> = <span class="kwd">Get-Date</span> <span class="var">$Cred</span>.EndDateTime
+        <span class="var">$DaysLeft</span> = (<span class="var">$Expiry</span> - <span class="var">$Today</span>).Days
 
-        $expiry = Get-Date $cred.EndDateTime
-        $daysLeft = ($expiry - $today).Days
-
-        if ($notifyDays -contains $daysLeft) {
-            Send-MgUserMail -UserId "alerts-mailbox@domain.com" `
-                -Body @{
-                    ContentType = "HTML"
-                    Content = "<b>$($app.DisplayName)</b> secret expires on <b>$expiry</b>."
-                } -Subject "⚠ Secret expiring in $daysLeft days" `
-                -ToRecipients @(@{EmailAddress = @{Address="iam-team@domain.com"}})
+        <span class="kwd">if</span> (<span class="var">$NotifyDays</span> -contains <span class="var">$DaysLeft</span>) {
+            <span class="var">$ExpiringApps</span> += [PSCustomObject]@{
+                Name = <span class="var">$App</span>.DisplayName
+                AppId = <span class="var">$App</span>.AppId
+                DaysLeft = <span class="var">$DaysLeft</span>
+                ExpiryDate = <span class="var">$Expiry</span>.ToString(<span class="str">"yyyy-MM-dd"</span>)
+            }
         }
     }
 }
-</pre>
 
-    <div class="shot">Screenshot Placeholder (Runbook Verify)</div>
-</div>
+<span class="cmt"># --- NOTIFICATION ---</span>
+<span class="kwd">if</span> (<span class="var">$ExpiringApps</span>.Count -gt 0) {
+    <span class="var">$TableRows</span> = <span class="str">""</span>
+    <span class="kwd">foreach</span> (<span class="var">$Row</span> <span class="kwd">in</span> <span class="var">$ExpiringApps</span>) {
+        <span class="var">$TableRows</span> += <span class="str">"&lt;tr&gt;&lt;td&gt;$($Row.Name)&lt;/td&gt;&lt;td&gt;$($Row.DaysLeft)&lt;/td&gt;&lt;td&gt;$($Row.ExpiryDate)&lt;/td&gt;&lt;/tr&gt;"</span>
+    }
 
-<!-- STEP 6 -->
-<div class="card fade">
-    <div class="step-title">6. Schedule the Runbook</div>
-    <div class="step-text">
-        • Go to your runbook → Schedules → Add Schedule<br>
-        • Run it **daily**<br>
-        • Test manually for the first run to verify email delivery
+    <span class="var">$EmailBody</span> = <span class="str">"
+    &lt;h3&gt;⚠️ App Secrets Expiring&lt;/h3&gt;
+    &lt;table border='1' cellpadding='5' style='border-collapse:collapse;'&gt;
+        &lt;tr bgcolor='#f2f2f2'&gt;&lt;th&gt;App Name&lt;/th&gt;&lt;th&gt;Days Left&lt;/th&gt;&lt;th&gt;Expiry Date&lt;/th&gt;&lt;/tr&gt;
+        $TableRows
+    &lt;/table&gt;"</span>
+
+    <span class="var">$Params</span> = @{
+        Message = @{
+            Subject = <span class="str">"Action Required: $($ExpiringApps.Count) Apps Expiring"</span>
+            Body = @{ ContentType = <span class="str">"HTML"</span>; Content = <span class="var">$EmailBody</span> }
+            ToRecipients = @( @{ EmailAddress = @{ Address = <span class="var">$RecipientEmail</span> } } )
+        }
+        SaveToSentItems = <span class="str">"false"</span>
+    }
+    
+    <span class="kwd">Send-MgUserMail</span> -UserId <span class="var">$SenderEmail</span> -BodyParameter <span class="var">$Params</span>
+    <span class="kwd">Write-Output</span> <span class="str">"Alert sent for $($ExpiringApps.Count) apps."</span>
+} <span class="kwd">else</span> {
+    <span class="kwd">Write-Output</span> <span class="str">"No secrets expiring in target window."</span>
+}</code></pre>
     </div>
+  </section>
 
-    <div class="shot">Screenshot Placeholder (Schedule Setup)</div>
-</div>
+  <section id="step5">
+    <h2>5. Schedule</h2>
+    <p>In the Automation Account, go to <strong>Schedules</strong> > <strong>Add a schedule</strong>.</p>
+    <ul>
+      <li>Set recurrence to <strong>Daily</strong>.</li>
+      <li>Link the schedule to your Runbook.</li>
+    </ul>
+    <p>We recommend running this at 8:00 AM in your local time zone so the alerts are at the top of the inbox.</p>
+  </section>
 
-<footer>
-    © 2025 · App Registration Secret Alerts · Designed for IAM Teams
-</footer>
+  <footer style="margin-top:80px; padding-top:20px; border-top:1px solid #23263a; color:#555; font-size:14px; text-align:center;">
+    Internal Documentation · Last Updated 2025
+  </footer>
+
+</main>
+
+<script>
+  function copyCode(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector(`button[onclick="copyCode('${id}')"]`);
+      const original = btn.innerText;
+      btn.innerText = "Copied!";
+      setTimeout(() => btn.innerText = original, 2000);
+    });
+  }
+</script>
 
 </body>
 </html>
