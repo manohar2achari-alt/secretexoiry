@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;title&gt;Azure Client Secret Expiration Automation&lt;/title&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #f4f7fb;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #1a1a1a;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>header {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #0A4CFF;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: sticky;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>z-index: 1000;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>nav a {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 0 15px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>text-decoration: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>section {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>max-width: 900px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: auto;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 40px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h2 {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #0A4CFF;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin-bottom: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 25px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>box-shadow: 0px 3px 10px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin-bottom: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>code {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #eee;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 6px 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 6px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>white-space: pre-wrap;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>footer {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #0A4CFF;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin-top: 40px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>scroll-behavior: smooth;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;header&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Azure Client Secret Expiration Automation&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#overview"&gt;Overview&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#how"&gt;How It Works&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#steps"&gt;Steps&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#scripts"&gt;Scripts&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#contact"&gt;Contact&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
+<p class="p1">&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;section id="overview"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Overview&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Azure App Registration client secrets expire every 1–24 months. When secrets expire:&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Applications fail authentication&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Critical services go down&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Admins scramble to rotate secrets&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;This website gives you a simple and reliable way to AUTOMATE client secret renewal using Azure Automation + Managed Identity + Microsoft Graph API.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;section id="how"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;How It Works&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;The automation flow works like this:&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Azure Automation runbook runs daily&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Runbook uses a Managed Identity with Graph API permissions&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;It scans all App Registrations for secrets expiring in the next X days&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;If expiration is near → it auto-renews the secret&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;Sends notifications through email/Teams&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/ul&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;pre&gt;&lt;code&gt;</p>
+<p class="p1">[Automation Account MI] ---reads---&gt; [App Registrations]</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>\</p>
+<p class="p1"><span class="Apple-converted-space">                                 </span>---&gt; renews secrets</p>
+<p class="p1"><span class="Apple-converted-space">                                  </span>\</p>
+<p class="p1"><span class="Apple-converted-space">                                   </span>---&gt; sends email alert</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/code&gt;&lt;/pre&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;section id="steps"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Step-by-Step Guide&lt;/h2&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;1. Create Azure Automation Account&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Create a PowerShell 7.2 automation account with a System-Assigned Managed Identity.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;2. Assign Managed Identity Permissions&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Assign these Microsoft Graph API App roles:&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Application.ReadWrite.All&lt;/strong&gt;&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Directory.Read.All&lt;/strong&gt;&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/ul&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;3. List Expiring Secrets&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Runbook calls Graph API to fetch all App credential expirations.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;4. Auto-Renew Secrets&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;If a secret is expiring in next X days, script creates a new one.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;5. Send Alerts&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Email/SMS/Teams notification using Logic App or SendGrid.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;section id="scripts"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Scripts&lt;/h2&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;PowerShell Runbook – Detect Expiring Secrets&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;code&gt;</p>
+<p class="p1">$today = Get-Date</p>
+<p class="p1">$threshold = $today.AddDays(30)</p>
+<p class="p2"><br></p>
+<p class="p1">$appRegs = Invoke-MgGraphRequest -Method GET -Uri "https://graph.microsoft.com/v1.0/applications?$select=id,displayName,passwordCredentials"</p>
+<p class="p2"><br></p>
+<p class="p1">foreach ($app in $appRegs.value) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>foreach ($cred in $app.passwordCredentials) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if ([datetime]$cred.endDateTime -lt $threshold) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>Write-Output "Expiring: $($app.displayName) - $($cred.endDateTime)"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/code&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;PowerShell Runbook – Auto Renew Secret&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;code&gt;</p>
+<p class="p1">$newSecret = @{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>passwordCredential = @{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>displayName = "AutoRenewed"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">Invoke-MgGraphRequest `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>-Method POST `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>-Uri "https://graph.microsoft.com/v1.0/applications/$($app.id)/addPassword" `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>-Body ($newSecret | ConvertTo-Json)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/code&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Kusto Query – Secret Monitoring&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;code&gt;</p>
+<p class="p1">AppServiceAuthenticationAudit</p>
+<p class="p1">| where SecretExpiryDate &amp;lt; now() + 30d</p>
+<p class="p1">| project AppName, SecretExpiryDate</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/code&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;section id="contact"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Contact&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;For feedback or contributions, reach out:&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; admin@example.com&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;footer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>© 2025 Azure Automation — Client Secret Management</p>
+<p class="p1">&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
