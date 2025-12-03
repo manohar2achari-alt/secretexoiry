@@ -1,234 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>App Registration Secret Alerts</title>
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>App Registration Secret Alerts — Managed Identity + Shared Mailbox</title>
+<meta name="description" content="Monitor Azure App Registration client secrets and send 60/30/7-day email alerts from a shared mailbox using Managed Identity and Microsoft Graph (app-only)." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-    /* Apple-style fonts */
-    body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-        background: #ffffff;
-        color: #111;
-    }
+  /* Apple-like clean styling */
+  :root{
+    --bg:#ffffff;
+    --muted:#6b7280;
+    --accent:#0a84ff;
+    --soft:#f6f8fb;
+    --card-radius:20px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:Inter, -apple-system, "SF Pro Text", "Helvetica Neue", Arial;
+    background:var(--bg); color:#0f1724;-webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale; line-height:1.55;
+  }
+  .wrap{max-width:1100px;margin:36px auto;padding:28px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#6d28d9,#2563eb);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+  h1{font-size:28px;margin:0}
+  .tag{color:var(--muted);font-size:14px}
+  nav{display:flex;gap:12px}
+  nav a{color:var(--muted);font-weight:600;font-size:14px}
+  nav a:hover{color:var(--accent)}
 
-    /* Smooth fade-in animation */
-    .fade-in {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeIn 0.8s ease forwards;
-    }
+  /* Hero */
+  .hero{margin-top:22px;padding:36px;border-radius:var(--card-radius);background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:0 10px 30px rgba(18,38,63,0.06)}
+  .hero-grid{display:flex;gap:28px;align-items:center}
+  .hero-left{flex:1}
+  .hero-right{width:340px}
+  .muted{color:var(--muted)}
+  .cta{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+  .btn{background:var(--accent);color:white;padding:10px 16px;border-radius:12px;border:0;font-weight:700;cursor:pointer}
+  .btn-ghost{background:transparent;border:1px solid rgba(15,23,36,0.06);color:var(--muted);padding:10px 14px;border-radius:12px}
 
-    @keyframes fadeIn {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+  /* layout */
+  .cols{display:grid;grid-template-columns:1fr 420px;gap:24px;margin-top:28px}
+  @media(max-width:980px){.cols{grid-template-columns:1fr}}
+  .card{background:var(--soft);padding:20px;border-radius:14px;border:1px solid rgba(15,23,36,0.04)}
 
-    /* Hero Section */
-    .hero {
-        text-align: center;
-        padding: 100px 20px;
-        background: linear-gradient(180deg, #fafafa, #ffffff);
-    }
+  /* steps */
+  .steps{display:flex;flex-direction:column;gap:12px}
+  .step{display:flex;gap:14px;align-items:flex-start;padding:12px;border-radius:12px;background:white;box-shadow:0 6px 18px rgba(12,24,48,0.04)}
+  .num{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,#eef2ff,#e0f2ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#0b1220}
+  .step h3{margin:0 0 6px 0;font-size:16px}
+  .step p{margin:0;color:var(--muted);font-size:14px}
 
-    .hero h1 {
-        font-size: 48px;
-        font-weight: 600;
-        margin-bottom: 20px;
-        letter-spacing: -1px;
-    }
+  /* code */
+  .code-header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .code-box{background:#0b1220;padding:14px;border-radius:12px;color:#dbeafe;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,monospace;font-size:13px;overflow:auto}
+  .copy{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px;border-radius:8px;cursor:pointer}
+  .small{font-size:13px;color:var(--muted)}
 
-    .hero p {
-        font-size: 22px;
-        max-width: 600px;
-        margin: 0 auto;
-        color: #555;
-        line-height: 1.5;
-    }
+  /* screenshots */
+  .screens{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+  @media(max-width:760px){.screens{grid-template-columns:1fr}}
+  .shot{background:#f4f6fb;border-radius:10px;padding:12px;text-align:center;color:var(--muted);min-height:120px;display:flex;align-items:center;justify-content:center}
 
-    /* Section Headers */
-    h2 {
-        font-size: 36px;
-        margin-top: 80px;
-        margin-bottom: 20px;
-        text-align: center;
-        font-weight: 600;
-        letter-spacing: -0.5px;
-    }
-
-    /* Card Layout */
-    .card {
-        max-width: 900px;
-        margin: 20px auto;
-        padding: 30px;
-        background: #fefefe;
-        border-radius: 30px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-    }
-
-    .step-title {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-
-    .step-text {
-        color: #444;
-        line-height: 1.6;
-        font-size: 18px;
-    }
-
-    /* Code Block */
-    pre {
-        background: #f5f5f7;
-        padding: 20px;
-        border-radius: 16px;
-        overflow-x: auto;
-        font-size: 14px;
-        line-height: 1.5;
-        margin-top: 20px;
-    }
-
-    /* Screenshot Placeholder */
-    .screenshot {
-        width: 100%;
-        height: 260px;
-        background: #eaeaea;
-        border-radius: 18px;
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #888;
-        font-size: 18px;
-        font-style: italic;
-    }
-
-    /* Footer */
-    footer {
-        text-align: center;
-        padding: 40px;
-        color: #777;
-        margin-top: 60px;
-        font-size: 14px;
-    }
-
+  footer{margin-top:28px;text-align:center;color:var(--muted);font-size:13px;padding-bottom:28px}
 </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">AS</div>
+        <div>
+          <h1>App Registration Secret Alerts</h1>
+          <div class="tag">Managed Identity → send from shared mailbox • 60 / 30 / 7 day alerts</div>
+        </div>
+      </div>
+      <nav aria-label="Main">
+        <a href="#steps">Quick Steps</a>
+        <a href="#runbook">Runbook</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
 
-<div class="hero fade-in">
-    <h1>App Registration Secret Alerts</h1>
-    <p>
-        A lightweight and reliable Azure Automation runbook that sends early warning
-        email alerts when any App Registration secret is 60, 30, or 7 days from expiration.
-    </p>
-</div>
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid">
+        <div class="hero-left">
+          <h2 id="hero-title">Notify teams before app registration secrets expire — securely and simply</h2>
+          <p class="muted" style="margin-top:10px">
+            Use an Azure Automation runbook with the Automation Account's System-assigned Managed Identity. It reads App Registration secrets, checks expiry, and uses Microsoft Graph (app-only) to send mail *from a shared mailbox* to your IAM distribution list.
+          </p>
 
-<h2 class="fade-in">Quick Setup Guide</h2>
+          <div class="cta">
+            <button class="btn" onclick="document.getElementById('steps').scrollIntoView({behavior:'smooth'})">Get Quick Steps</button>
+            <button class="btn-ghost" onclick="document.getElementById('runbook').scrollIntoView({behavior:'smooth'})">View Runbook</button>
+            <div style="align-self:center" class="small">No SMTP creds • No auto-rotation</div>
+          </div>
 
-<!-- Step 1 -->
-<div class="card fade-in">
-    <div class="step-title">1. Create an Azure Automation Account</div>
-    <div class="step-text">
-        - Go to Azure Portal → “Automation Accounts” → New Account<br>
-        - Choose same region as your workloads<br>
-        - Enable System Assigned Managed Identity
-    </div>
+          <div style="margin-top:14px" class="small">Prerequisites: Azure contributor permissions to create Automation Account, Entra admin to grant app permissions (admin consent).</div>
+        </div>
 
-    <div class="screenshot">Screenshot Placeholder (Automation Account)</div>
-</div>
+        <div class="hero-right card" aria-hidden>
+          <div style="font-size:13px;color:var(--muted)">Status</div>
+          <div style="font-weight:700;margin-top:6px">Recommended quick deploy</div>
+          <hr style="margin:12px 0;border:0;border-top:1px solid rgba(15,23,36,0.04)">
+          <div class="small"><strong>Permissions (app-only) required for Managed Identity:</strong>
+            <ul style="margin:8px 0 0 18px">
+              <li>Application.Read.All</li>
+              <li>Directory.Read.All</li>
+              <li>Mail.Send</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- Step 2 -->
-<div class="card fade-in">
-    <div class="step-title">2. Assign Required Graph API Permissions</div>
-    <div class="step-text">
-        Give the automation account’s Managed Identity the following permissions:<br><br>
+    <!-- TWO COLUMN LAYOUT -->
+    <div class="cols" id="steps" tabindex="-1">
+      <div>
+        <div class="card">
+          <h2>Quick Steps (minimal, followable)</h2>
+          <p class="small">These are the exact actions to get alerts running quickly. Each step includes the portal path and the expected result.</p>
 
-        <b>Microsoft Graph → Application.Read.All</b><br>
-        <b>Microsoft Graph → Directory.Read.All</b><br>
-        <b>Microsoft Graph → Mail.Send</b><br><br>
+          <div class="steps" style="margin-top:12px">
+            <div class="step" aria-live="polite">
+              <div class="num">1</div>
+              <div>
+                <h3>Create Automation Account (PowerShell 7)</h3>
+                <p class="muted">Portal → Create resource → <strong>Automation Account</strong>. In the new account: Identity → System assigned → <strong>On</strong> → Save. This enables a Managed Identity for the runbook.</p>
+              </div>
+            </div>
 
-        Assign them under:<br>
-        <i>Azure → Subscriptions → IAM → Add Role Assignment → Privileged Role Administrator / Directory Reader</i>
-    </div>
+            <div class="step">
+              <div class="num">2</div>
+              <div>
+                <h3>Grant Graph Application Permissions to the Managed Identity</h3>
+                <p class="muted">
+                  Portal → Entra ID → App registrations → Search for the Automation Account’s service principal (name like "<code>automation-<your-account></code>" in Enterprise applications) → <strong>API permissions</strong> → <em>Add a permission</em> → Microsoft Graph → Application permissions → add:
+                </p>
+                <ul class="small" style="margin-left:18px;color:var(--muted)">
+                  <li><strong>Application.Read.All</strong></li>
+                  <li><strong>Directory.Read.All</strong></li>
+                  <li><strong>Mail.Send</strong></li>
+                </ul>
+                <p class="muted">After adding, click <strong>Grant admin consent for &lt;Tenant&gt;</strong>. This is required for app-only (managed identity) flows.</p>
+              </div>
+            </div>
 
-    <div class="screenshot">Screenshot Placeholder (Permissions)</div>
-</div>
+            <div class="step">
+              <div class="num">3</div>
+              <div>
+                <h3>Prepare the Shared Mailbox</h3>
+                <p class="muted">Create or identify the mailbox to use as the "From" address (example: <code>automation-alerts@yourdomain.com</code>). When using app-only Mail.Send, the application can send as any mailbox after admin consent. Note the exact SMTP address — you'll use it in the runbook as <code>From</code> or in the Graph <code>userId</code>.</p>
+              </div>
+            </div>
 
-<!-- Step 3 -->
-<div class="card fade-in">
-    <div class="step-title">3. Create a Mailbox to Send Alerts</div>
-    <div class="step-text">
-        - Create a dedicated mailbox (example: automation-alerts@domain.com)<br>
-        - Add this mailbox as a member of your IAM Distribution List<br>
-        - Store credentials securely in the Automation Account under “Variables” or “Credentials”
-    </div>
+            <div class="step">
+              <div class="num">4</div>
+              <div>
+                <h3>Import & Publish the Runbook</h3>
+                <p class="muted">In Automation Account → Runbooks → Create a new runbook (Type: PowerShell 7). Paste the runbook code from the "Runbook" section below. Save → Publish.</p>
+              </div>
+            </div>
 
-    <div class="screenshot">Screenshot Placeholder (Mailbox Setup)</div>
-</div>
+            <div class="step">
+              <div class="num">5</div>
+              <div>
+                <h3>Schedule & Test</h3>
+                <p class="muted">Create a Schedule (daily) and link it to the runbook. Run the runbook manually with a test App Registration that has a short expiry secret (or temporarily modify NotifyDays to include 0–1 day) to verify emails reach the IAM distribution list.</p>
+              </div>
+            </div>
 
-<!-- Step 4 -->
-<div class="card fade-in">
-    <div class="step-title">4. Import the Runbook Script</div>
+            <div class="step">
+              <div class="num">6</div>
+              <div>
+                <h3>Verify Results</h3>
+                <p class="muted">Check Automation job output in the portal and the Sent Items for the mailbox (or use a DL recipient). Confirm the email subject and body contain App name, secret KeyId, expiry and days remaining.</p>
+              </div>
+            </div>
 
-    <div class="step-text">Use the following script inside your PowerShell runbook:</div>
+          </div>
+        </div>
 
-    <pre>
-$connectionName = "AzureRunAsConnection"
-Connect-AzAccount -Identity
+        <div class="card" style="margin-top:14px">
+          <h2>Troubleshooting & Notes</h2>
+          <ul class="small" style="margin-left:18px;color:var(--muted)">
+            <li>If Graph calls return 403, verify admin consent was granted for the application permissions.</li>
+            <li>Runbook must run PowerShell 7 to use the IMDS request and modern features.</li>
+            <li>For large tenants, runbook uses Graph pagination — allow it to complete or test with a filtered app list.</li>
+            <li>Do NOT place secret values in emails — only metadata. If you need to store a created secret, write to Key Vault and restrict access.</li>
+          </ul>
+        </div>
+      </div>
 
-Write-Output "Fetching App Registrations..."
+      <!-- RIGHT COLUMN: Runbook + Screenshots -->
+      <aside>
+        <div class="card" id="runbook">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <h2>Runbook (app-only Graph send from shared mailbox)</h2>
+              <div class="small muted">Copy and paste into a PowerShell 7 runbook in Automation Account.</div>
+            </div>
+            <button class="copy" id="copyBtn">Copy</button>
+          </div>
 
-$apps = az ad app list --query "[].{displayName:displayName, objectId:id}" | ConvertFrom-Json
+          <div style="margin-top:12px" class="small muted">This example uses the IMDS token (Managed Identity) to call Graph and POST to <code>/users/{sharedMailbox}/sendMail</code>.</div>
 
-$today = Get-Date
-$notifyDays = @(60, 30, 7)
+          <div style="margin-top:12px" class="code-box" id="codeBlock">
+<pre>
+// PARAMETERS - set as runbook parameters or variables
+param(
+  [string] $SharedMailbox = "automation-alerts@yourdomain.com",  # mailbox to appear as From
+  [int[]] $NotifyDays = @(60,30,7)
+)
 
-foreach ($app in $apps) {
-    $secrets = az ad app credential list --id $app.objectId | ConvertFrom-Json
-    foreach ($secret in $secrets) {
-        $expiry = Get-Date $secret.endDateTime
-        $daysLeft = ($expiry - $today).Days
+# Acquire Graph token with Managed Identity (IMDS)
+$imdsApi = "2018-02-01"
+$resource = "https://graph.microsoft.com/"
+$imdsUrl = "http://169.254.169.254/metadata/identity/oauth2/token?api-version=$imdsApi&resource=$([System.Web.HttpUtility]::UrlEncode($resource))"
+$tokenResp = Invoke-RestMethod -Method Get -Uri $imdsUrl -Headers @{ Metadata = "true" } -ErrorAction Stop
+$accessToken = $tokenResp.access_token
+$headers = @{ Authorization = "Bearer $accessToken"; "Content-Type" = "application/json" }
 
-        if ($notifyDays -contains $daysLeft) {
-            Send-MailMessage `
-                -To "iam-alerts@domain.com" `
-                -From "automation-alerts@domain.com" `
-                -Subject "⚠ Secret expiring in $daysLeft days: $($app.displayName)" `
-                -Body "Secret for $($app.displayName) expires on $expiry." `
-                -SmtpServer "smtp.office365.com" `
-                -Port 587 `
-                -UseSsl `
-                -Credential (Get-AutomationPSCredential -Name "AlertMailboxCreds")
-        }
+# Helper: send mail using Graph app-only to the shared mailbox's sendMail endpoint
+function Send-GraphMail {
+  param($fromAddress, $toRecipients, $subject, $bodyHtml, $headers)
+  $mailPayload = @{
+    message = @{
+      subject = $subject
+      body = @{ contentType = "HTML"; content = $bodyHtml }
+      toRecipients = ($toRecipients | ForEach-Object { @{ emailAddress = @{ address = $_ } } })
+      from = @{ emailAddress = @{ address = $fromAddress } }
     }
+    saveToSentItems = "true"
+  } | ConvertTo-Json -Depth 8
+
+  $uri = "https://graph.microsoft.com/v1.0/users/$($fromAddress)/sendMail"
+  Invoke-RestMethod -Method POST -Uri $uri -Headers $headers -Body $mailPayload -ErrorAction Stop
 }
-    </pre>
 
-    <div class="screenshot">Screenshot Placeholder (Runbook Import)</div>
-</div>
+# Get applications (paged)
+$next = "https://graph.microsoft.com/v1.0/applications?$select=id,displayName,passwordCredentials"
+while ($next) {
+  $resp = Invoke-RestMethod -Method Get -Uri $next -Headers $headers -ErrorAction Stop
+  foreach ($app in $resp.value) {
+    if (-not $app.passwordCredentials) { continue }
+    foreach ($cred in $app.passwordCredentials) {
+      if (-not $cred.endDateTime) { continue }
+      $expiry = [datetime]$cred.endDateTime
+      $daysLeft = [int]([math]::Floor(($expiry - (Get-Date)).TotalDays))
+      if ($NotifyDays -contains $daysLeft -or $daysLeft -lt 0) {
+        $subject = "⚠️ Secret expiring in $daysLeft days: $($app.displayName)"
+        $body = "<p>Application: <b>$($app.displayName)</b><br/>AppId: $($app.id)<br/>Secret KeyId: $($cred.keyId)<br/>Expiry: $($expiry.ToString('u'))<br/>Days remaining: <b>$daysLeft</b></p><p>Action required: please rotate/update the secret manually.</p>"
+        try {
+          Send-GraphMail -fromAddress $SharedMailbox -toRecipients @("IAM_DL@yourdomain.com") -subject $subject -bodyHtml $body -headers $headers
+          Write-Output "Sent notification for $($app.displayName) (in $daysLeft days)."
+        } catch {
+          Write-Warning "Failed to send mail for $($app.displayName): $($_.Exception.Message)"
+        }
+      }
+    }
+  }
+  if ($resp.'@odata.nextLink') { $next = $resp.'@odata.nextLink' } else { $next = $null }
+}
 
-<!-- Step 5 -->
-<div class="card fade-in">
-    <div class="step-title">5. Schedule the Runbook</div>
-    <div class="step-text">
-        - Create a schedule that runs <b>once every day</b><br>
-        - Link the schedule to this runbook<br>
-        - Test run it manually to verify alert emails
+Write-Output "Runbook finished: $(Get-Date -Format o)"
+</pre>
+          </div>
+
+          <div style="margin-top:12px;color:var(--muted);font-size:13px">
+            <strong>Important notes</strong>
+            <ul style="margin-left:18px;color:var(--muted)">
+              <li>You must grant admin consent for the Application permissions (Application.Read.All, Directory.Read.All, Mail.Send) to the Automation Account's service principal.</li>
+              <li>Using <code>/users/{sharedMailbox}/sendMail</code> with app-only permissions allows the app to send as that mailbox; admin consent is required.</li>
+              <li>The runbook saves sent emails to the mailbox Sent Items by using <code>saveToSentItems = true</code>.</li>
+              <li>Do not include secret values in emails. Send only metadata and instructions.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px" id="screenshots">
+          <h3 class="small" style="margin:0 0 8px 0">Screenshot Examples (replace with real captures)</h3>
+          <div class="screens">
+            <div class="shot">screenshot-60-days.png</div>
+            <div class="shot">screenshot-30-days.png</div>
+            <div class="shot">screenshot-7-days.png</div>
+          </div>
+          <div class="small muted" style="margin-top:10px">Capture: Entra ID → App registrations → &lt;App&gt; → Certificates & secrets. Show the expiry date column and highlight the row.</div>
+        </div>
+      </aside>
     </div>
 
-    <div class="screenshot">Screenshot Placeholder (Scheduling)</div>
-</div>
+    <footer id="contact">
+      <div class="small muted">Need help? Contact: <strong>admin@example.com</strong></div>
+      <div style="margin-top:8px;color:var(--muted)">© <span id="yr"></span> App Registration Secret Alerts</div>
+    </footer>
+  </div>
 
-<footer>
-    © 2025 App Registration Secret Alerts · Built for IAM Teams
-</footer>
+<script>
+  // copy code
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const copyBtn = document.getElementById('copyBtn');
+  const codeBlock = document.getElementById('codeBlock');
+  copyBtn.addEventListener('click', async () => {
+    const text = codeBlock.innerText.trim();
+    try {
+      await navigator.clipboard.writeText(text);
+      copyBtn.textContent = 'Copied ✓';
+      setTimeout(()=>copyBtn.textContent='Copy',1400);
+    } catch {
+      copyBtn.textContent = 'Copy failed';
+      setTimeout(()=>copyBtn.textContent='Copy',1400);
+    }
+  });
 
+  // smooth nav
+  document.querySelectorAll('nav a').forEach(a=>{
+    a.addEventListener('click', e=>{
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+    })
+  })
+</script>
 </body>
 </html>
